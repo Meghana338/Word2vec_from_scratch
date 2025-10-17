@@ -132,3 +132,43 @@ This project is open-source and available under the **MIT License**.
 **Meghana338**  
 GPU-Accelerated Word Embedding Researcher & Developer  
 [GitHub Repository](https://github.com/Meghana338/Word2vec_from_scratch)
+.  Navigate to the project directory:
+    ```sh
+    cd Word2Vec-from-Scratch(2)-GPU
+    ```
+3.  Launch Jupyter Notebook:
+    ```sh
+    jupyter notebook
+    ```
+4.  Open `word2vec.ipynb` and follow one of the scenarios below.
+
+---
+### **Execution Scenarios**
+
+This notebook supports different workflows depending on your goal.
+
+#### Scenario A: Full Pipeline (Training from Scratch)
+This is for running the entire process, from download to visualization. This is time-consuming.
+
+* **Cells to Run:** Click **"Run All"** at the top of the notebook. The first cell will handle all installations and data downloads automatically.
+
+#### Scenario B: Evaluation & Visualization Only (Using Pre-trained Vectors)
+This is the recommended workflow for quickly exploring the project's results. This assumes the `word_vectors.npy` and `vocabulary.json` files are already created using the code.
+
+1.  **Run Cell 1 ("Project Setup and Data Automation"):** This will install all required Python packages. You can ignore the data download messages if the files are already present.
+2.  **SKIP** all the cells for data processing and model training (Cells under headings 1, 2, and 3).
+3.  **Run all cells from the markdown header "4. Results and Analysis"** to the end of the notebook.
+    * To run only the word analogy tests, execute the cells under section "4.2. Quantitative Analysis: Word Analogies".
+    * To run only the visualizations, execute the cells under section "5. Visualizing the Embedding Space".
+
+## The Project Journey & Key Decisions
+
+This project involved several challenges that required iterative problem-solving.
+
+1.  **Data Processing:** The initial plan to use the `wikiextractor` library failed due to Python version incompatibility. This was solved by building a more robust, self-contained parser using Python's built-in `xml` library, which also gracefully handled the discovery of a truncated (corrupted) XML file.
+
+2.  **Tokenization:** The project initially used the `nltk` library, but a persistent and unresolvable `LookupError` in the execution environment forced a pivot. The solution was to **remove the NLTK dependency entirely** and replace its functions with a universal `re.findall()` approach, making the project more resilient.
+
+3.  **GPU Acceleration:** Initial performance estimates on the CPU with NumPy predicted a training time of over a month. To make this feasible, I chose to accelerate the training with a GPU. I selected **CuPy** over PyTorch because it allowed me to keep the low-level, "from scratch" logic of the implementation while simply swapping the backend to the GPU.
+
+4.  **Training Duration:** Even with a GPU, training on the full corpus was estimated to take many days. For this project, I made the practical decision to stop the training at **6.65 million pairs**. As the extensive evaluation results show, this was more than sufficient to produce a high-quality model that learned complex semantic relationships.
